@@ -68,7 +68,7 @@ export default function FactsSection() {
                     transition={{ duration: 0.8 }}
                     className="text-center mb-16"
                 >
-                    <span className="text-secondary font-mono text-sm mb-4 block">// цікаві факти</span>
+                    <span className="text-secondary font-mono text-sm mb-4 block">{/* // цікаві факти */}</span>
                     <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6">
                         <span className="gradient-text">Факти</span> про програмістів
                     </h2>
@@ -111,7 +111,7 @@ export default function FactsSection() {
                     <div className="glass rounded-2xl p-8 max-w-md mx-auto">
                         <div className="text-primary font-mono text-sm mb-2">console.log(</div>
                         <div className="text-3xl sm:text-4xl font-bold mb-2">
-                            <span className="gradient-text">"300,000+"</span>
+                            <span className="gradient-text">&quot;300,000+&quot;</span>
                         </div>
                         <div className="text-primary font-mono text-sm mb-4">);</div>
                         <p className="text-text-dim">

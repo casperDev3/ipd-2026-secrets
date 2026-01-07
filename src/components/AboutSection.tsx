@@ -36,7 +36,7 @@ export default function AboutSection() {
                     transition={{ duration: 0.8 }}
                     className="text-center mb-16"
                 >
-                    <span className="text-primary font-mono text-sm mb-4 block">// про свято</span>
+                    <span className="text-primary font-mono text-sm mb-4 block">{/* // про свято */}</span>
                     <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6">
                         Що таке <span className="gradient-text">День Програміста</span>?
                     </h2>

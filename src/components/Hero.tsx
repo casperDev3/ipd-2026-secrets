@@ -113,7 +113,7 @@ export default function Hero() {
                                     <span className="text-text-dim/50 mr-3">{index + 1}</span>
                                     <span
                                         dangerouslySetInnerHTML={{
-                                            __html: line
+                                            __html: (line || '')
                                                 .replace(/function|const|return/g, '<span class="text-secondary">$&</span>')
                                                 .replace(/"[^"]*"/g, '<span class="text-primary">$&</span>')
                                                 .replace(/🎉/g, '<span class="text-xl">🎉</span>')

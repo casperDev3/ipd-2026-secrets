@@ -66,7 +66,7 @@ export default function CelebrationSection() {
                     transition={{ duration: 0.8 }}
                     className="text-center mb-16"
                 >
-                    <span className="text-accent font-mono text-sm mb-4 block">// святкування</span>
+                    <span className="text-accent font-mono text-sm mb-4 block">{/* // святкування */}</span>
                     <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6">
                         Як <span className="gradient-text">святкувати</span>?
                     </h2>
@@ -87,8 +87,8 @@ export default function CelebrationSection() {
                             whileTap={{ scale: 0.98 }}
                             onClick={() => setSelectedIdea(selectedIdea === index ? null : index)}
                             className={`glass rounded-2xl p-6 cursor-pointer transition-all duration-300 ${selectedIdea === index
-                                    ? 'ring-2 ring-primary bg-primary/5'
-                                    : 'hover:bg-surface-light/50'
+                                ? 'ring-2 ring-primary bg-primary/5'
+                                : 'hover:bg-surface-light/50'
                                 }`}
                         >
                             <motion.div
