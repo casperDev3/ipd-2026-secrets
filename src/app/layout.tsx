@@ -24,6 +24,9 @@ export const metadata: Metadata = {
   },
 };
 
+import { EasterEggProvider } from "@/components/EasterEggContext";
+import EasterEggsLogic from "@/components/EasterEggsLogic";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -34,7 +37,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <EasterEggProvider>
+          <EasterEggsLogic />
+          {children}
+        </EasterEggProvider>
       </body>
     </html>
   );

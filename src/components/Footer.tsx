@@ -1,9 +1,26 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useEasterEggs } from './EasterEggContext';
+import { useState } from 'react';
 
 export default function Footer() {
     const currentYear = new Date().getFullYear();
+    const { foundEggs, totalEggs, unlockEgg } = useEasterEggs();
+    const [binaryMode, setBinaryMode] = useState(false);
+    const [glitchClicks, setGlitchClicks] = useState(0);
+
+    const handleCopyrightHover = () => {
+        setBinaryMode(true);
+        unlockEgg('binary', 'Binary decoder', 'Ви розшифрували бінарний копірайт!');
+    };
+
+    const handleTitleClick = () => {
+        setGlitchClicks(prev => prev + 1);
+        if (glitchClicks + 1 === 7) {
+            unlockEgg('glitch', 'Glitch in the Matrix', 'Ви натиснули на заголовок 7 разів та зламали систему.');
+        }
+    };
 
     return (
         <footer className="py-12 border-t border-border relative">
@@ -11,14 +28,21 @@ export default function Footer() {
                 {/* Main footer content */}
                 <div className="text-center mb-8">
                     <motion.div
-                        className="text-4xl mb-4"
+                        className="text-4xl mb-4 inline-block cursor-grab active:cursor-grabbing"
                         whileHover={{ rotate: 360 }}
-                        transition={{ duration: 0.6 }}
+                        drag
+                        dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
+                        onDragEnd={() => unlockEgg('drag_logo', 'Thinking outside the box', 'Ви спробували вкрасти логотип, перетягнувши його!')}
                     >
                         {'</>'}
                     </motion.div>
-                    <h3 className="text-xl font-bold mb-2">
-                        День Програміста <span className="text-primary">2026</span>
+                    <h3
+                        className={`text-xl font-bold mb-2 select-none cursor-pointer ${glitchClicks >= 7 ? 'animate-pulse text-red-500' : ''}`}
+                        onClick={handleTitleClick}
+                    >
+                        {glitchClicks >= 7 ? 'S¥SŦEM FAT∆L 3RR0R' : (
+                            <>День Програміста <span className="text-primary">2026</span></>
+                        )}
                     </h3>
                     <p className="text-text-dim text-sm">
                         Зроблено з ❤️ та ☕ в Україні 🇺🇦
@@ -50,30 +74,43 @@ export default function Footer() {
                     <div className="text-2xl mb-2">🥚</div>
                     <h4 className="font-bold mb-2">Пасхалки</h4>
                     <p className="text-text-dim text-sm mb-4">
-                        На цьому сайті заховано <span className="text-primary font-bold">12 пасхалок!</span>
+                        Знайдено: <span className="text-primary font-bold text-lg">{foundEggs.length}</span> / {totalEggs}
                         <br />
-                        Знайдеш їх усі?
+                        {foundEggs.length === totalEggs ? '🎉 ТИ ГЕНІЙ КОДУ! 🎉' : 'Шукай уважніше!'}
                     </p>
                     <div className="flex justify-center gap-2 flex-wrap">
-                        {Array.from({ length: 12 }).map((_, i) => (
-                            <motion.div
-                                key={i}
-                                className="w-6 h-6 rounded-full bg-surface-light border border-border flex items-center justify-center text-xs"
-                                whileHover={{ scale: 1.2, borderColor: 'var(--primary)' }}
-                            >
-                                ?
-                            </motion.div>
-                        ))}
+                        {Array.from({ length: totalEggs }).map((_, i) => {
+                            const isFound = i < foundEggs.length;
+                            return (
+                                <motion.div
+                                    key={i}
+                                    className={`w-6 h-6 rounded-full border flex items-center justify-center text-xs transition-colors duration-500 ${isFound
+                                            ? 'bg-primary border-primary text-background font-bold'
+                                            : 'bg-surface-light border-border text-text-dim'
+                                        }`}
+                                    whileHover={{ scale: 1.2 }}
+                                    initial={false}
+                                    animate={isFound ? { rotate: [0, 360], scale: [1, 1.5, 1] } : {}}
+                                >
+                                    {isFound ? '✓' : '?'}
+                                </motion.div>
+                            );
+                        })}
                     </div>
                 </motion.div>
 
                 {/* Copyright */}
-                <div className="text-center text-text-dim text-xs">
-                    <p className="font-mono">
-                        © {currentYear} IPD-2026-Secrets |
-                        <span className="text-primary"> v1.0.0</span>
+                <div className="text-center text-text-dim text-xs" onClick={handleCopyrightHover} onMouseEnter={handleCopyrightHover} onMouseLeave={() => setBinaryMode(false)}>
+                    <p className="font-mono cursor-pointer hover:text-primary transition-colors">
+                        {binaryMode
+                            ? '01001001 01010000 01000100 00101101 00110010 00110000 00110010 00110110'
+                            : `© ${currentYear} IPD-2026-Secrets | v1.0.0`
+                        }
                     </p>
-                    <p className="mt-2 opacity-50">
+                    <p
+                        className="mt-2 opacity-50 font-mono hover:opacity-100 cursor-pointer hover:text-primary transition-all"
+                        onClick={() => unlockEgg('console', 'Console Master', 'Ви натиснули на емуляцію консолі.')}
+                    >
                         console.log(&quot;Happy Programmer&apos;s Day!&quot;);
                     </p>
                 </div>

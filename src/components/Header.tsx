@@ -1,11 +1,34 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+import { useEasterEggs } from './EasterEggContext';
+
 export default function Header() {
+    const { unlockEgg } = useEasterEggs();
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const [logoClicks, setLogoClicks] = useState(0);
+    const pressTimer = useRef<NodeJS.Timeout | null>(null);
+
+    const handleLogoClick = (e: React.MouseEvent) => {
+        e.preventDefault();
+        setLogoClicks(prev => prev + 1);
+        if (logoClicks + 1 === 5) {
+            unlockEgg('logo_spin', 'Spinning Logo', 'Ви закрутили логотип 5 разів!');
+        }
+    };
+
+    const handlePressStart = () => {
+        pressTimer.current = setTimeout(() => {
+            unlockEgg('sudo', 'Admin Mode', 'Ви утримували логотип (як справжній адмін).');
+        }, 1500);
+    };
+
+    const handlePressEnd = () => {
+        if (pressTimer.current) clearTimeout(pressTimer.current);
+    };
 
     useEffect(() => {
         const handleScroll = () => {
@@ -30,9 +53,17 @@ export default function Header() {
                 {/* Logo */}
                 <motion.a
                     href="#"
-                    className="flex items-center gap-2 text-primary font-mono text-lg font-bold"
+                    className="flex items-center gap-2 text-primary font-mono text-lg font-bold select-none"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
+                    onClick={handleLogoClick}
+                    onMouseDown={handlePressStart}
+                    onMouseUp={handlePressEnd}
+                    onMouseLeave={handlePressEnd}
+                    onTouchStart={handlePressStart}
+                    onTouchEnd={handlePressEnd}
+                    animate={logoClicks >= 5 ? { rotate: 360 } : {}}
+                    transition={{ duration: 1, repeat: logoClicks >= 5 ? Infinity : 0, ease: "linear" }}
                 >
                     <span className="text-2xl">{'</>'}</span>
                     <span className="hidden sm:inline">IPD 2026</span>
@@ -68,7 +99,7 @@ export default function Header() {
                 >
                     <motion.span
                         className="w-6 h-0.5 bg-primary rounded-full"
-                        animate={{ rotate: isOpen ? 45 : 0, y: isOpen ? 6 : 0 }}
+                        animate={{ rotate: isOpen ? 45 : 0, y: isOpen ? 8 : 0 }}
                     />
                     <motion.span
                         className="w-6 h-0.5 bg-primary rounded-full"
@@ -76,7 +107,7 @@ export default function Header() {
                     />
                     <motion.span
                         className="w-6 h-0.5 bg-primary rounded-full"
-                        animate={{ rotate: isOpen ? -45 : 0, y: isOpen ? -6 : 0 }}
+                        animate={{ rotate: isOpen ? -45 : 0, y: isOpen ? -8 : 0 }}
                     />
                 </motion.button>
             </div>

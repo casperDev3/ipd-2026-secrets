@@ -11,7 +11,10 @@ const codeLines = [
     '}',
 ];
 
+import { useEasterEggs } from './EasterEggContext';
+
 export default function Hero() {
+    const { unlockEgg } = useEasterEggs();
     const [displayedLines, setDisplayedLines] = useState<string[]>([]);
 
     useEffect(() => {
@@ -56,9 +59,16 @@ export default function Hero() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6 }}
-                        className="inline-flex items-center gap-2 bg-primary/10 border border-primary/30 rounded-full px-4 py-2 mb-6"
+                        className="inline-flex items-center gap-2 bg-primary/10 border border-primary/30 rounded-full px-4 py-2 mb-6 cursor-help relative group active:scale-95 transition-transform"
+                        onMouseEnter={() => unlockEgg('date_hover', 'Time Traveler', 'Ви перевірили дату.')}
+                        onClick={() => {
+                            unlockEgg('date_hover', 'Time Traveler', 'Ви перевірили дату.');
+                        }}
                     >
                         <span className="text-primary font-mono text-sm">📅 7 січня 2026</span>
+                        <div className="hidden sm:block absolute top-full mt-2 left-1/2 -translate-x-1/2 bg-surface border border-primary text-xs p-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                            new Date('2026-01-07')
+                        </div>
                     </motion.div>
 
                     {/* Main heading */}
@@ -95,7 +105,15 @@ export default function Hero() {
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.8, delay: 0.6 }}
-                        className="code-block p-4 sm:p-6 text-left max-w-sm mx-auto mb-8 animate-float"
+                        className="code-block p-4 sm:p-6 text-left max-w-sm mx-auto mb-8 animate-float select-none"
+                        onDoubleClick={() => unlockEgg('java', 'Java Mode', 'Ви двічі клікнули на блок коду (Block Select).')}
+                        onClick={(e) => {
+                            // Check if clicked element is a span with text "function"
+                            const target = e.target as HTMLElement;
+                            if (target.textContent === 'function') {
+                                unlockEgg('lambda', 'Lambda Function', 'Ви знайшли ключове слово function.');
+                            }
+                        }}
                     >
                         <div className="flex items-center gap-2 mb-4">
                             <div className="w-3 h-3 rounded-full bg-accent" />
@@ -114,7 +132,8 @@ export default function Hero() {
                                     <span
                                         dangerouslySetInnerHTML={{
                                             __html: (line || '')
-                                                .replace(/function|const|return/g, '<span class="text-secondary">$&</span>')
+                                                .replace(/function/g, '<span class="text-secondary cursor-pointer hover:underline">function</span>')
+                                                .replace(/const|return/g, '<span class="text-secondary">$&</span>')
                                                 .replace(/"[^"]*"/g, '<span class="text-primary">$&</span>')
                                                 .replace(/🎉/g, '<span class="text-xl">🎉</span>')
                                         }}

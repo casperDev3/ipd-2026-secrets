@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef } from 'react';
+import { useEasterEggs } from './EasterEggContext';
 
 const facts = [
     {
@@ -50,8 +51,17 @@ const colorClasses = {
 };
 
 export default function FactsSection() {
+    const { unlockEgg } = useEasterEggs();
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true, margin: "-50px" });
+
+    const handleFactClick = (fact: typeof facts[0]) => {
+        if (fact.title === 'Перший баг') {
+            unlockEgg('bug', 'Bug Hunter', 'Ви знайшли і виправили баг 🐛');
+        } else if (fact.title === 'Каватворці') {
+            unlockEgg('coffee', 'Coffee Lover', 'Ви поповнили запаси кави ☕');
+        }
+    };
 
     return (
         <section id="facts" className="py-20 relative" ref={ref}>
@@ -86,12 +96,14 @@ export default function FactsSection() {
                             animate={isInView ? { opacity: 1, y: 0 } : {}}
                             transition={{ duration: 0.6, delay: index * 0.1 }}
                             whileHover={{ y: -5, scale: 1.02 }}
-                            className={`glass rounded-2xl p-6 border transition-all duration-300 cursor-default ${colorClasses[fact.color as keyof typeof colorClasses]}`}
+                            onClick={() => handleFactClick(fact)}
+                            className={`glass rounded-2xl p-6 border transition-all duration-300 cursor-pointer ${colorClasses[fact.color as keyof typeof colorClasses]}`}
                         >
                             <motion.div
                                 className="text-4xl mb-4"
                                 whileHover={{ scale: 1.2, rotate: [0, -10, 10, 0] }}
                                 transition={{ duration: 0.4 }}
+                                animate={fact.title === 'Перший баг' ? { x: [0, 5, -5, 0], transition: { repeat: Infinity, duration: 2, repeatDelay: 3 } } : {}}
                             >
                                 {fact.icon}
                             </motion.div>
